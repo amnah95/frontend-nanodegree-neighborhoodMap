@@ -39,8 +39,9 @@ function initMap() {
 		markers.push (marker);
 		// extend the marker boundries 
 		bounds.extend(marker.position);
-		// on clikc event
+		// on click events
 		marker.addListener('click', function() {
+		toggleBounce(this);
 		populateInfosindow(this, largeInfowindow);
 	});
 	};
@@ -51,6 +52,12 @@ function initMap() {
 
 
 function populateInfosindow (marker, infoWindow) {	
+	if (marker.getAnimation() !== null) {
+		marker.setAnimation(null);
+	} else {
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+		marker.setAnimation(null);
+	}
 	if (infoWindow.marker != marker ) {
 		infoWindow.marker = marker;
 		infoWindow.setContent ('<div>' + marker.title + '</div>');
@@ -59,5 +66,14 @@ function populateInfosindow (marker, infoWindow) {
 		infoWindow.addListener('colseclick', function() {
 		infoWindow.setMarker(null);
 		})
+	}
+}
+
+function toggleBounce (marker) {
+	if (marker.getAnimation() !== null) {
+		marker.setAnimation(null);
+	} else {
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+		marker.setAnimation(null);
 	}
 }
