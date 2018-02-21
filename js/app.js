@@ -102,7 +102,7 @@ function loadData (marker) {
 	var search = marker.title;
 	console.log (marker.wikiName);
 
-	var wikiURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+  +'&format=json&formatversion=2&callback=wikiCallback';
+	var wikiURL = 'https://en.wikipedia.org/w/api.php?format=json&formatversion=2&callback=wikiCallback';
 	
 	$.ajax({
 		url: wikiURL,
