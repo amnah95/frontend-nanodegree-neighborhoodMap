@@ -57,7 +57,6 @@ function initMap() {
 		// on click events
 		marker.addListener('click', function() {
 		toggleBounce(this);
-		// loadData();
 		populateInfosindow(this, largeInfowindow);
 		loadData (this);
 	});
@@ -66,6 +65,7 @@ function initMap() {
 	map.fitBounds(bounds);
 }
 
+// open info window
 function populateInfosindow (marker, infoWindow) {	
 	if (marker.getAnimation() !== null) {
 		marker.setAnimation(null);
@@ -75,7 +75,8 @@ function populateInfosindow (marker, infoWindow) {
 	}
 	if (infoWindow.marker != marker ) {
 		infoWindow.marker = marker;
-		infoWindow.setContent ('<div>' + marker.title + '</div>');
+		infoWindow.setContent ('<div> <h6> ' + marker.title + ' </h6> ' + 
+			'<p> Find out more about this place</p><p id="wikipedia-links"></p></div>');
 		infoWindow.open(map, marker);
 		// When closing the window
 		infoWindow.addListener('colseclick', function() {
@@ -84,6 +85,7 @@ function populateInfosindow (marker, infoWindow) {
 	}
 }
 
+// To make pins bounce 
 function toggleBounce (marker) {
 	if (marker.getAnimation() !== null) {
 		marker.setAnimation(null);
@@ -93,7 +95,7 @@ function toggleBounce (marker) {
 	}
 }
 
-//NYT
+//Wiki Link
 function loadData (marker) {
 	var $wikiElem = $('#wikipedia-links');
 
@@ -102,7 +104,7 @@ function loadData (marker) {
 	var search = marker.title;
 	console.log (marker.wikiName);
 
-	var wikiURL = 'https://en.wikipedia.org/w/api.php?format=json&formatversion=2&callback=wikiCallback';
+	var wikiURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search&format=json&formatversion=2&callback=wikiCallback';
 	
 	$.ajax({
 		url: wikiURL,
