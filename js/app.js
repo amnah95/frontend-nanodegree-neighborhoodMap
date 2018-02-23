@@ -34,6 +34,22 @@ var locations = [
 	}  
 ];
 
+//Wiki info
+function loadData (marker) {
+	var $wikiElem = $('#wikipedia-links');
+	$wikiElem.text("");
+	var search = marker.title;
+	var wikiURL = 'https://en.wikipedia.org/w/api.php?action=search&openSearch&format=json&formatversion=2&callback=wikiCallback';
+	$.ajax({
+		url: wikiURL,
+		dataType: "jsonp",
+		success: function (response) {
+			var url = 'https://en.wikipedia.org/wiki/'+ marker.wikiName ;
+			$wikiElem.append ('<li><a href= "'+url+'">'+ marker.title +'</a></li>'); 
+		}
+	});
+}
+
 
 function populateInfoswindow (marker, infoWindow) {	
 
@@ -56,21 +72,7 @@ function toggleBounce (marker) {
 	marker.setAnimation(null);
 }
 
-//NYT
-function loadData (marker) {
-	var $wikiElem = $('#wikipedia-links');
-	$wikiElem.text("");
-	var search = marker.title;
-	var wikiURL = 'https://en.wikipedia.org/w/api.php?action=search&openSearch&format=json&formatversion=2&callback=wikiCallback';
-	$.ajax({
-		url: wikiURL,
-		dataType: "jsonp",
-		success: function (response) {
-			var url = 'https://en.wikipedia.org/wiki/'+ marker.wikiName ;
-			$wikiElem.append ('<li><a href= "'+url+'">'+ marker.title +'</a></li>'); 
-		}
-	});
-}
+
 
 function viewModel () {
 
@@ -79,15 +81,15 @@ function viewModel () {
 	this.markers = [];
     this.searchText = ko.observable("");
 
+    var largeInfowindow = new google.maps.InfoWindow();
+    var bounds = new google.maps.LatLngBounds();
+
 	this.initMap = function() {
 		//constructor creates a new map - only center and zoom are required
 		map = new google.maps.Map(document.getElementById('map'), {
 			center: {lat: 21.419528, lng: 39.739124},
 			zoom: 14
 		});
-
-		var largeInfowindow = new google.maps.InfoWindow();
-		var bounds = new google.maps.LatLngBounds();
 
 		for (var i = 0; i < locations.length; i++ ) {
 			// Get places info
@@ -119,15 +121,10 @@ function viewModel () {
 
 	this.initMap();
 
-	// this.populateAndBounceMarker = function() {
-	// 		toggleBounce(this);
-	// 	self.populateInfoswindow(this, self.largeInfowindow);
-			
- //        this.setAnimation(google.maps.Animation.BOUNCE);
- //        setTimeout((function() {
- //            this.setAnimation(null);
- //        }).bind(this), 1400);
- //    };
+	this.event = function() {
+        toggleBounce(this);
+        populateInfoswindow(this, largeInfowindow);
+    };
 
 	this.filteredList = ko.computed(function() {
         var newList = [];
