@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link href="css/navbar-fixed-side.css" rel="stylesheet">
+	<!-- inculde Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<title></title>
+</head>
+<body class="container-fluid">
+	<div class="row">
+	<!-- the menu -->
+		<div class="col-md-3">
+	        <span class="navbar-text">
+   				What to Visit in Makkah
+ 			</span>
+	       	<form class="form-inline">
+				<input class="form-control mr-md-2" type="search" placeholder="Search" aria-label="Search", data-bind="textInput: searchText, valueUpdate: 'afterkeydown'">
+			</form>
+			<ul data-bind="foreach: filteredList">
+				<li ><a href="#" data-bind="text: title, click: $parent.populateAndBounceMarker"></a></li>
+			</ul>
+		</div>
+		
+		<!-- the map -->
+		<div class="col-md-9" id="map">
+			
+		</div>
+
+	</div>
+	
+	<script src="js/app.js"></script>
+	<script src="js/knockout-3.4.2.js"></script>
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe97Ps-JXYkHnya7JXXZUJ6c3TVWVXHhM&v=3.exp&callback=runApp">
+	</script>
+
+</body>
+</html>
