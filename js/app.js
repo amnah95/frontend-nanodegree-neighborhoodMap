@@ -47,6 +47,8 @@ function populateInfoswindow (marker, infoWindow) {
 		infoWindow.setMarker(null);
 		})
 	}
+
+	loadData (marker);
 }
 
 function toggleBounce (marker) {
@@ -71,6 +73,8 @@ function loadData (marker) {
 }
 
 function viewModel () {
+
+	var self = this;
 
 	this.markers = [];
     this.searchText = ko.observable("");
@@ -106,17 +110,24 @@ function viewModel () {
 			// on click events
 			marker.addListener('click', function() {
 			toggleBounce(this);
-			// loadData();
 			populateInfoswindow(this, largeInfowindow);
-			loadData (this);
 		});
 		};
 
 		map.fitBounds(bounds);
 	}
-	
 
 	this.initMap();
+
+	// this.populateAndBounceMarker = function() {
+	// 		toggleBounce(this);
+	// 	self.populateInfoswindow(this, self.largeInfowindow);
+			
+ //        this.setAnimation(google.maps.Animation.BOUNCE);
+ //        setTimeout((function() {
+ //            this.setAnimation(null);
+ //        }).bind(this), 1400);
+ //    };
 
 	this.filteredList = ko.computed(function() {
         var newList = [];
