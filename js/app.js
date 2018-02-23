@@ -70,7 +70,7 @@ function populateInfoswindow (marker, infoWindow) {
 		// When closing the window
 		infoWindow.addListener('colseclick', function() {
 		infoWindow.setMarker(null);
-		})
+		});
 	}
 
 	loadData (marker);
@@ -93,6 +93,12 @@ function viewModel () {
 
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
+
+    // the event listener
+	this.event = function() {
+        toggleBounce(this);
+        populateInfoswindow(this, largeInfowindow);
+    };
 
     // initating the map 
 	this.initMap = function() {
@@ -121,22 +127,13 @@ function viewModel () {
 			// extend the marker boundries 
 			bounds.extend(marker.position);
 			// on click events
-			marker.addListener('click', function() {
-			toggleBounce(this);
-			populateInfoswindow(this, largeInfowindow);
-		});
+			marker.addListener('click', self.event);
 		};
 
 		map.fitBounds(bounds);
 	}
 
 	this.initMap();
-
-	// the function called by the MVC
-	this.event = function() {
-        toggleBounce(this);
-        populateInfoswindow(this, largeInfowindow);
-    };
 
     // the filtering cpmuted function to make both results and markers appear or hide
 	this.filteredList = ko.computed(function() {
