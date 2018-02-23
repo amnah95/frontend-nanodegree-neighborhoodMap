@@ -128,10 +128,10 @@ function viewModel () {
 			bounds.extend(marker.position);
 			// on click events
 			marker.addListener('click', self.event);
-		};
+		}
 
 		map.fitBounds(bounds);
-	}
+	};
 
 	this.initMap();
 
