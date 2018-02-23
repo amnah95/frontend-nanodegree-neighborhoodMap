@@ -1,14 +1,14 @@
-body {
+
+.searchBox {
+
+	margin-bottom: 5%;
 	
-}
-
-.list {
-
-	margin-top: 1.5%;
-	border: solid 2px black;
-
 }
 
 #map {
 	height: 100vh;
+}
+
+.sideBer {
+	background-color: black;
 }

@@ -34,10 +34,17 @@ var locations = [
 	}  
 ];
 
-//Wiki info
+// loadData function to load Wiki info
 function loadData (marker) {
+
 	var $wikiElem = $('#wikipedia-links');
-	$wikiElem.text("");
+	// $wikiElem.text("");
+
+	// Here we handle wiki failed request
+	var wikiRequestTimeout = setTimeout(function(){
+		$wikiElem.text("Faild to load link, check internet connection");
+	}, 8000);
+
 	var search = marker.title;
 	var wikiURL = 'https://en.wikipedia.org/w/api.php?action=search&openSearch&format=json&formatversion=2&callback=wikiCallback';
 	$.ajax({
@@ -46,11 +53,13 @@ function loadData (marker) {
 		success: function (response) {
 			var url = 'https://en.wikipedia.org/wiki/'+ marker.wikiName ;
 			$wikiElem.append ('<li><a href= "'+url+'">'+ marker.title +'</a></li>'); 
+			clearTimeout (wikiRequestTimeout);
 		}
 	});
 }
 
 
+// This function will generate the infowindow 
 function populateInfoswindow (marker, infoWindow) {	
 
 	if (infoWindow.marker != marker ) {
@@ -67,13 +76,14 @@ function populateInfoswindow (marker, infoWindow) {
 	loadData (marker);
 }
 
+
+// This function to make the marker bounce
 function toggleBounce (marker) {
 	marker.setAnimation(google.maps.Animation.BOUNCE);
 	marker.setAnimation(null);
 }
 
-
-
+// here is the view model 
 function viewModel () {
 
 	var self = this;
@@ -84,6 +94,7 @@ function viewModel () {
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
 
+    // initating the map 
 	this.initMap = function() {
 		//constructor creates a new map - only center and zoom are required
 		map = new google.maps.Map(document.getElementById('map'), {
@@ -121,18 +132,20 @@ function viewModel () {
 
 	this.initMap();
 
+	// the function called by the MVC
 	this.event = function() {
         toggleBounce(this);
         populateInfoswindow(this, largeInfowindow);
     };
 
+    // the filtering cpmuted function to make both results and markers appear or hide
 	this.filteredList = ko.computed(function() {
         var newList = [];
         for (var i = 0; i < this.markers.length; i++) {
-            var markerLocation = this.markers[i];
-            if (markerLocation.title.toLowerCase().includes(this.searchText()
+            var marker = this.markers[i];
+            if (marker.title.toLowerCase().includes(this.searchText()
                     .toLowerCase())) {
-                newList.push(markerLocation);
+                newList.push(marker);
                 this.markers[i].setVisible(true);
             } else {
                 this.markers[i].setVisible(false);
@@ -142,7 +155,12 @@ function viewModel () {
     }, this);
 }
 
-
+//the call back function 
 function runApp () {
 	ko.applyBindings(new viewModel());
+
+// error handling method
+function GoogleMapsErrorHandler() {
+	alert("Error loading Google Maps :( Please check the internet connection and try again");
+}
 }  
