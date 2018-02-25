@@ -36,20 +36,16 @@ var locations = [
 
 // loadData function to load Wiki info
 function loadData (marker) {
-
-	var $wikiElem = $('#wikipedia-links');
-
-	var search = marker.title;
 	var wikiURL = 'https://en.wikipedia.org/w/api.php?action=search&openSearch&format=json&formatversion=2&callback=wikiCallback';
 	$.ajax({
 		url: wikiURL,
 		dataType: "jsonp",
 		success: function (response) {
 			var url = 'https://en.wikipedia.org/wiki/'+ marker.wikiName ;
-			$wikiElem.append ('<li><a href= "'+url+'">'+ marker.title +'</a></li>'); 
+			return url;
 		}
 	}).fail(function() {
-    $wikiElem.text("Faild to load link, check internet connection");
+    return ("Faild to load link, check internet connection");
   });
 }
 
@@ -57,18 +53,19 @@ function loadData (marker) {
 // This function will generate the infowindow 
 function populateInfoswindow (marker, infoWindow) {	
 
+	var url = loadData(marker);
+
 	if (infoWindow.marker != marker ) {
 		infoWindow.marker = marker;
 		infoWindow.setContent ('<div> <h6> ' + marker.title + ' </h6> ' + 
-				'<p> Find out more about this place</p><p id="wikipedia-links"></p></div>');
+				'<p> Find out more about this place</p><p id="wikipedia-links"></p></div>'+
+				'<li><a href= "'+url+'">'+ marker.title +'</a></li>');
 		infoWindow.open(map, marker);
 		// When closing the window
 		infoWindow.addListener('colseclick', function() {
 		infoWindow.setMarker(null);
 		});
 	}
-
-	loadData (marker);
 }
 
 
