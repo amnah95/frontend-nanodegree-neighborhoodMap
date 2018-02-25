@@ -38,12 +38,6 @@ var locations = [
 function loadData (marker) {
 
 	var $wikiElem = $('#wikipedia-links');
-	// $wikiElem.text("");
-
-	// Here we handle wiki failed request
-	var wikiRequestTimeout = setTimeout(function(){
-		$wikiElem.text("Faild to load link, check internet connection");
-	}, 8000);
 
 	var search = marker.title;
 	var wikiURL = 'https://en.wikipedia.org/w/api.php?action=search&openSearch&format=json&formatversion=2&callback=wikiCallback';
@@ -53,9 +47,10 @@ function loadData (marker) {
 		success: function (response) {
 			var url = 'https://en.wikipedia.org/wiki/'+ marker.wikiName ;
 			$wikiElem.append ('<li><a href= "'+url+'">'+ marker.title +'</a></li>'); 
-			clearTimeout (wikiRequestTimeout);
 		}
-	});
+	}).fail(function() {
+    $wikiElem.text("Faild to load link, check internet connection");
+  });
 }
 
 
@@ -155,9 +150,9 @@ function viewModel () {
 //the call back function 
 function runApp () {
 	ko.applyBindings(new viewModel());
+}
 
 // error handling method
 function GoogleMapsErrorHandler() {
 	alert("Error loading Google Maps :( Please check the internet connection and try again");
 }
-}  
